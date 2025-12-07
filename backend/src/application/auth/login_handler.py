@@ -1,18 +1,22 @@
 import hashlib
 import secrets
+from datetime import datetime, UTC
 
 from application.auth.common.errors import UserNotFound, PwdMismatch
 from application.common.interfaces.uow import Uow
-from infrastructure.db.gateways.auth_gateway import AuthGateway
+from infrastructure.db.gateways.session_gateway import SessionGateway
+from infrastructure.db.gateways.user_gateway import UserGateway
+from infrastructure.db.models import UserSession
 
 
 class LoginHandler:
-    def __init__(self, uow: Uow, gateway: AuthGateway):
+    def __init__(self, uow: Uow, user_gateway: UserGateway, session_gateway: SessionGateway):
         self.uow = uow
-        self.gateway = gateway
+        self.user_gateway = user_gateway
+        self.session_gateway = session_gateway
 
     async def handle(self, payload):
-        user = await self.gateway.find_user_by_email(payload.email)
+        user = await self.user_gateway.find_user_by_email(payload.email)
         if not user:
             raise UserNotFound(by="email")
 
@@ -23,7 +27,12 @@ class LoginHandler:
         token = secrets.token_urlsafe(32)
         token_hash = hashlib.sha256(token.encode()).hexdigest()
 
-        await self.gateway.create_session(user.id, token_hash)
+        session = UserSession(
+            user_id=user.id,
+            session_token_hash=token_hash,
+            created_at=datetime.now(tz=UTC),
+        )
+        await self.session_gateway.save(session)
 
         await self.uow.commit()
         return user, token

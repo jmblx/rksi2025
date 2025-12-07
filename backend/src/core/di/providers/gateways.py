@@ -1,7 +1,9 @@
 from dishka import Provider, Scope, provide
 
-from infrastructure.db.gateways.auth_gateway import AuthGateway
+from infrastructure.db.gateways.session_gateway import SessionGateway
+from infrastructure.db.gateways.user_gateway import UserGateway
 
 
 class GatewayProvider(Provider):
-    get_auth_gateway = provide(AuthGateway, scope=Scope.REQUEST)
+    user_gateway = provide(UserGateway, scope=Scope.REQUEST)
+    session_gateway = provide(SessionGateway, scope=Scope.REQUEST)

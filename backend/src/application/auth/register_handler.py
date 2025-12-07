@@ -1,32 +1,42 @@
 import hashlib
 import secrets
+from datetime import UTC, datetime
 
 from application.auth.common.errors import EmailAlreadyRegistered
 from application.common.interfaces.uow import Uow
-from infrastructure.db.gateways.auth_gateway import AuthGateway
+from infrastructure.db.gateways.session_gateway import SessionGateway
+from infrastructure.db.gateways.user_gateway import UserGateway
+from infrastructure.db.models import User, UserSession
 
 
 class RegisterHandler:
-    def __init__(self, uow: Uow, gateway: AuthGateway):
+    def __init__(self, uow: Uow, user_gateway: UserGateway, session_gateway: SessionGateway):
         self.uow = uow
-        self.gateway = gateway
+        self.user_gateway = user_gateway
+        self.session_gateway = session_gateway
 
     async def handle(self, payload):
-        exists = await self.gateway.find_user_by_email(payload.email)
+        exists = await self.user_gateway.find_user_by_email(payload.email)
         if exists:
             raise EmailAlreadyRegistered
 
         password_hash = hashlib.sha256(payload.password.encode()).hexdigest()
 
-        user = await self.gateway.create_user(
+        user = User(
             email=payload.email,
             password_hash=password_hash,
         )
+        await self.user_gateway.save(user)
 
         token = secrets.token_urlsafe(32)
         token_hash = hashlib.sha256(token.encode()).hexdigest()
 
-        await self.gateway.create_session(user.id, token_hash)
+        user_session = UserSession(
+            user_id=user.id,
+            session_token_hash=token_hash,
+            created_at=datetime.now(tz=UTC),
+        )
+        await self.session_gateway.save(user_session)
 
         await self.uow.commit()
         return user, token

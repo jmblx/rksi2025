@@ -24,3 +24,10 @@ class PwdMismatch(ApplicationError):
     @property
     def title(self) -> str:
         return "Login password mismatch"
+
+
+@dataclass(eq=False)
+class UnauthorizedError(ApplicationError):
+    @property
+    def title(self) -> str:
+        return "Unauthorized"

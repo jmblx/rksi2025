@@ -19,3 +19,8 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     id: int
     session_token: str
+
+
+class MeResponse(BaseModel):
+    id: int
+    email: EmailStr
