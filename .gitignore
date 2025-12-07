@@ -1,0 +1,13 @@
+.env
+venv/
+*.egg-info/
+
+*.pyc
+__pycache__/
+
+.idea/
+
+data
+letsencrypt
+webroot
+build

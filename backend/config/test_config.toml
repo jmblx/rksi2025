@@ -1,0 +1,6 @@
+[database]
+host = "109.120.178.67"
+port = "5432"
+name = "test_race_simulation"
+user = "postgres"
+password = "postgres"
