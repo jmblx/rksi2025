@@ -19,6 +19,7 @@ jobs:
           port: 22
           script: |
             cd /root/rksi2025/
+            git stash
             git pull origin main
 
             cat > /root/rksi2025/backend/config/config.toml << 'EOF'
