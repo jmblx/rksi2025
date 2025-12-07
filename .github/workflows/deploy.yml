@@ -21,6 +21,8 @@ jobs:
             cd /root/rksi2025/
             git pull origin main
 
-            printf "%s" "${{ secrets.BACKEND_TOML_CONF }}" > /root/rksi2025/backend/config/config.toml
-
+            cat > /root/rksi2025/backend/config/config.toml << 'EOF'
+            ${{ secrets.BACKEND_TOML_CONF }}
+            EOF
+            
             docker compose up --build -d
