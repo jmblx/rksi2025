@@ -17,7 +17,7 @@ class LoginRequest(BaseModel):
 
 
 class LoginResponse(BaseModel):
-    id: int
+    user_id: int
     session_token: str
 
 

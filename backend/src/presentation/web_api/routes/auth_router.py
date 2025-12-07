@@ -31,4 +31,4 @@ async def login(
     handler: FromDishka[LoginHandler],
 ) -> LoginResponse:
     user, session_token = await handler.handle(payload)
-    return LoginResponse(id=user.id, session_token=session_token)
+    return LoginResponse(user_id=user.id, session_token=session_token)
