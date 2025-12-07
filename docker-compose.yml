@@ -39,12 +39,6 @@ services:
     depends_on:
       - db
 
-  frontend:
-    build:
-      context: frontend
-    volumes:
-      - ./build:/app/dist
-
   nginx:
     build:
       context: nginx
