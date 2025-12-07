@@ -1,6 +1,7 @@
 .env
 venv/
 *.egg-info/
+backend/config/config.toml
 
 *.pyc
 __pycache__/

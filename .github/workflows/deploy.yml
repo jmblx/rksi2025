@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd /root/RKSI-2025/
+            cd /root/rksi2025/
             git pull origin main
 
             printf "%s" "${{ secrets.BACKEND_TOML_CONF }}" > /root/rksi2025/backend/config/config.toml
