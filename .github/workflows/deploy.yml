@@ -18,6 +18,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd /root/DGTU-SPRING2025/
+            cd /root/RKSI-2025/
             git pull origin main
-            docker-compose up --build -d
+
+            printf "%s" "${{ secrets.BACKEND_TOML_CONF }}" > /root/rksi2025/backend/config/config.toml
+
+            docker compose up --build -d

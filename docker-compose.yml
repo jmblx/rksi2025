@@ -13,7 +13,7 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=race_simulation
+      - POSTGRES_DB=rksi2025
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
