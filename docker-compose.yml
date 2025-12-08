@@ -12,10 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=rksi2025
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file: .env
 
   backend:
     build:

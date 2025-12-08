@@ -1,0 +1,19 @@
+[global]
+debug = false
+
+[gunicorn]
+bind = "0.0.0.0:8080"
+workers = 2
+timeout = 30
+worker_class = "uvicorn.workers.UvicornWorker"
+
+[database]
+host = "localhost"
+port = "5432"
+name = "rksi2025"
+user = "postgres"
+password = "postgres"
+
+[redis]
+host = "localhost"
+port = 6379
