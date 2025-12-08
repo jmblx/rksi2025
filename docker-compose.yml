@@ -17,14 +17,13 @@ services:
   backend:
     build:
       context: backend
-    command: [ "sh", "/backend/docker/serve.sh" ]
+    command: ["sh", "/backend/docker/serve.sh"]
     ports:
       - "8080:8080"
     volumes:
       - ./backend:/backend
-    depends_on:
-      - redis
-      - db
+    environment:
+      - DEBUG=1
 
   migrations:
     profiles: [ "migration" ]

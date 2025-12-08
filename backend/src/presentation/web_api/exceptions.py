@@ -8,7 +8,7 @@ from starlette import status
 from starlette.requests import Request
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
-from application.auth.common.errors import EmailAlreadyRegistered, UserNotFound
+from application.auth.common.errors import EmailAlreadyRegistered, UserNotFound, PwdMismatch, UnauthorizedError
 from application.common.errors.base import AppError
 from presentation.web_api.responses import ErrorData, ErrorResponse
 
@@ -23,6 +23,8 @@ def setup_exception_handlers(app: FastAPI):
     app.add_exception_handler(
         UserNotFound, error_handler(status.HTTP_404_NOT_FOUND)
     )
+    app.add_exception_handler(PwdMismatch, error_handler(status.HTTP_401_UNAUTHORIZED))
+    app.add_exception_handler(UnauthorizedError, error_handler(status.HTTP_401_UNAUTHORIZED))
     app.add_exception_handler(Exception, unknown_exception_handler)
 
 
