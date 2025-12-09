@@ -16,14 +16,14 @@ class UserNotFound(ApplicationError):
 
     @property
     def title(self) -> str:
-        return "User not found by %s".format(self.by)
+        return f"User not found by {self.by}"
 
 
 @dataclass(eq=False)
-class PwdMismatch(ApplicationError):
+class CredMismatch(ApplicationError):
     @property
     def title(self) -> str:
-        return "Login password mismatch"
+        return "Credentials Mismatch"
 
 
 @dataclass(eq=False)

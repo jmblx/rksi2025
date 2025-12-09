@@ -1,38 +1,46 @@
 import hashlib
 import secrets
 from datetime import datetime, UTC
+from typing import cast
 
-from application.auth.common.errors import UserNotFound, PwdMismatch
+from redis.asyncio import Redis
+
+from application.auth.common.errors import UserNotFound, CredMismatch
 from application.common.interfaces.uow import Uow
 from infrastructure.db.gateways.session_gateway import SessionGateway
 from infrastructure.db.gateways.user_gateway import UserGateway
-from infrastructure.db.models import UserSession
+from infrastructure.db.models import UserSession, User
+from infrastructure.email_notification import EmailCodeService
+from presentation.web_api.routes.schemas import LoginRequest
 
 
 class LoginHandler:
-    def __init__(self, uow: Uow, user_gateway: UserGateway, session_gateway: SessionGateway):
+    def __init__(
+        self,
+        uow: Uow,
+        user_gateway: UserGateway,
+        session_gateway: SessionGateway,
+        email_code_service: EmailCodeService,
+        redis: Redis,
+    ):
         self.uow = uow
         self.user_gateway = user_gateway
         self.session_gateway = session_gateway
+        self.email_code_service = email_code_service
+        self.redis = redis
 
-    async def handle(self, payload):
-        user = await self.user_gateway.find_user_by_email(payload.email)
+    async def handle(self, payload: LoginRequest):
+        email = cast(str, payload.email)
+        user = await self.user_gateway.find_user_by_email(email)
         if not user:
-            raise UserNotFound(by="email")
+            user = User(email=email)
+            await self.user_gateway.save(user)
 
-        password_hash = hashlib.sha256(payload.password.encode()).hexdigest()
-        if user.password_hash != password_hash:
-            raise PwdMismatch
+        code = f"{secrets.randbelow(10000):04d}"
 
-        token = secrets.token_urlsafe(32)
-        token_hash = hashlib.sha256(token.encode()).hexdigest()
+        await self.email_code_service.send_code(email, code)
 
-        session = UserSession(
-            user_id=user.id,
-            session_token_hash=token_hash,
-            created_at=datetime.now(tz=UTC),
-        )
-        await self.session_gateway.save(session)
+        hashed = hashlib.sha256(code.encode()).hexdigest()
+        await self.redis.set(f"email_code:{email}", hashed, ex=600)
 
         await self.uow.commit()
-        return user, token

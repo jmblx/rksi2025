@@ -8,30 +8,26 @@ from infrastructure.db.gateways.user_gateway import UserGateway
 from infrastructure.db.models.user import User
 from infrastructure.db.models.session import UserSession
 
-SessionHash = NewType("SessionHash", str)
+AccessToken = NewType("AccessToken", str)
 
 
 class IdentityProvider:
     def __init__(
         self,
-        session_hash: SessionHash,
+        access_token: AccessToken,
         session_gateway: SessionGateway,
         user_gateway: UserGateway,
     ):
-        self.session_hash = session_hash
+        self.access_token = access_token
         self.session_gateway = session_gateway
         self.user_gateway = user_gateway
 
     async def get_current_user_id(self) -> int:
-        if not self.session_hash:
+        if not self.access_token:
             raise UnauthorizedError()
 
-        logger.info(f"Raw session token: {self.session_hash}")
-
-        hashed = hashlib.sha256(self.session_hash.encode()).hexdigest()
-
-        session: UserSession | None = await self.session_gateway.find_session(
-            session_hash=hashed
+        session: UserSession | None = await self.session_gateway.find_by_access(
+            access_token=self.access_token
         )
 
         if session is None:

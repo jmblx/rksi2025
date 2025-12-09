@@ -1,0 +1,14 @@
+import datetime
+
+from sqlalchemy import Integer, DateTime, String
+from sqlalchemy.orm import Mapped, mapped_column
+
+from infrastructure.db.models import Base
+
+
+class Document(Base):
+    __tablename__ = 'document'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    expiration_date: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False)
+    hash: Mapped[str] = mapped_column(String(64), nullable=False)

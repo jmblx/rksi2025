@@ -8,7 +8,7 @@ from core.config import (
     GlobalConfig,
     GunicornConfig,
     RedisConfig,
-    config_loader,
+    config_loader, SmtpConfig,
 )
 
 LoggingConfig = NewType("LoggingConfig", dict)
@@ -44,3 +44,7 @@ class SettingsProvider(Provider):
     @provide
     def provide_logging_config(self) -> LoggingConfig:
         return config_loader.logging_config
+
+    @provide(scope=Scope.APP)
+    def smtp_conf(self) -> SmtpConfig:
+        return config_loader.app_config.smtp

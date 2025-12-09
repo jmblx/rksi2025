@@ -1,4 +1,5 @@
 import logging
+import os
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -37,11 +38,20 @@ class GlobalConfig:
 
 
 @dataclass
+class SmtpConfig:
+    smtp_password: str
+    smtp_user: str
+    smtp_host: str
+    smtp_port: int
+
+
+@dataclass
 class AppConfig:
     gunicorn: GunicornConfig
     database: DatabaseConfig
     redis: RedisConfig
     global_: GlobalConfig
+    smtp: SmtpConfig
 
 
 logger = logging.getLogger("core.config")
@@ -90,6 +100,7 @@ class ConfigLoader:
             database=DatabaseConfig(**toml_data["database"]),
             redis=redis,
             global_=GlobalConfig(**toml_data["global"]),
+            smtp=SmtpConfig(**toml_data["smtp"]),
         )
         cls._logging_config = logging_config
 

@@ -11,8 +11,8 @@ class SessionGateway:
         self.session.add(session)
         await self.session.flush()
 
-    async def find_session(self, session_hash: str) -> UserSession | None:
+    async def find_by_access(self, access_token: str) -> UserSession | None:
         stmt = select(UserSession).where(
-            UserSession.session_token_hash == session_hash
+            UserSession.access_token == access_token
         )
         return (await self.session.execute(stmt)).scalar()
