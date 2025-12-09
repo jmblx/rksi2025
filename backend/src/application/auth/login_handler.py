@@ -1,5 +1,6 @@
 import hashlib
 import secrets
+import threading
 from datetime import datetime, UTC
 from typing import cast
 
@@ -38,7 +39,8 @@ class LoginHandler:
 
         code = f"{secrets.randbelow(10000):04d}"
 
-        await self.email_code_service.send_code(email, code)
+        t = threading.Thread(target=self.email_code_service.send_code, args=(email, code))
+        t.start()
 
         hashed = hashlib.sha256(code.encode()).hexdigest()
         await self.redis.set(f"email_code:{email}", hashed, ex=600)

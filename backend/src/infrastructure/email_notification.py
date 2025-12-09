@@ -1,4 +1,11 @@
+import threading
+
 from infrastructure.notification.smtp_service import SmtpService
+
+
+def send_async(service: SmtpService, to: str, subject: str, body: str):
+    t = threading.Thread(target=service.send_email, args=(to, subject, body))
+    t.start()
 
 
 class EmailCodeService:
