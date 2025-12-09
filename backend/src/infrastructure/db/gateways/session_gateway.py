@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from infrastructure.db.models.session import UserSession
 
 
@@ -16,3 +17,12 @@ class SessionGateway:
             UserSession.access_token == access_token
         )
         return (await self.session.execute(stmt)).scalar()
+
+    async def find_by_refresh(self, refresh_token):
+        stmt = select(UserSession).where(
+            UserSession.refresh_token == refresh_token
+        )
+        return (await self.session.execute(stmt)).scalar()
+
+    async def delete(self, session: UserSession) -> None:
+        await self.session.delete(session)

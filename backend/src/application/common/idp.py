@@ -1,13 +1,13 @@
-import hashlib
+from datetime import UTC, datetime
 from typing import NewType
 
-from application.auth.common.errors import UserNotFound, UnauthorizedError
-from core.config import logger
+from application.auth.common.errors import UnauthorizedError, UserNotFoundError
 from infrastructure.db.gateways.session_gateway import SessionGateway
 from infrastructure.db.gateways.user_gateway import UserGateway
-from infrastructure.db.models.user import User
 from infrastructure.db.models.session import UserSession
+from infrastructure.db.models.user import User
 
+RefreshToken = NewType("RefreshToken", str)
 AccessToken = NewType("AccessToken", str)
 
 
@@ -24,14 +24,16 @@ class IdentityProvider:
 
     async def get_current_user_id(self) -> int:
         if not self.access_token:
-            raise UnauthorizedError()
+            raise UnauthorizedError
 
         session: UserSession | None = await self.session_gateway.find_by_access(
             access_token=self.access_token
         )
 
-        if session is None:
-            raise UnauthorizedError()
+        now = datetime.now(UTC)
+        expired = session.access_expires_at <= now
+        if session is None or expired:
+            raise UnauthorizedError
 
         return session.user_id
 
@@ -40,6 +42,6 @@ class IdentityProvider:
 
         user = await self.user_gateway.find_user_by_id(user_id)
         if user is None:
-            raise UserNotFound(by="id")
+            raise UserNotFoundError(by="id")
 
         return user

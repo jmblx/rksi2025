@@ -7,6 +7,7 @@
 ## Сконфигурируйте по шаблонам кофиги в проекте:
 
 https://github.com/jmblx/rksi2025/blob/main/.env.template
+
 https://github.com/jmblx/rksi2025/blob/main/backend/config/config.template.toml
 
 ## Первый деплой (с миграцией БД):
@@ -74,34 +75,8 @@ make run
 
 ---
 
-## Конфигурация `config.toml`
-
-```toml
-[global]
-debug = false  # Влияет на поведение Gunicorn/Uvicorn (например, отключает авто-перезапуск и логгирование в dev-режиме)
-
-[gunicorn]
-bind = "0.0.0.0:8080"
-workers = 2
-timeout = 30
-worker_class = "uvicorn.workers.UvicornWorker"
-
-[database]
-host = "localhost"
-port = "5432"
-name = "..."
-user = "postgres"
-password = "postgres"
-
-[redis]
-host = "localhost"
-port = 6379
-```
-
----
-
 ## ERD (Entity Relationship Diagram)
 
-![erd](erd.jpg)
+![erd.png](readme_assets/erd.png)
 
 ---

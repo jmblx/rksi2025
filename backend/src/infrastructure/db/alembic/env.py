@@ -21,7 +21,7 @@ config.set_section_option(section, "DB_PORT", db_config.port)
 config.set_section_option(section, "DB_USER", db_config.user)
 config.set_section_option(section, "DB_NAME", db_config.name)
 config.set_section_option(section, "DB_PASS", db_config.password)
-print(db_config.host)
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 

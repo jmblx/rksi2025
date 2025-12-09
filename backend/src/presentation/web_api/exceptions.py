@@ -8,7 +8,12 @@ from starlette import status
 from starlette.requests import Request
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
-from application.auth.common.errors import EmailAlreadyRegistered, UserNotFound, EmailCodeMismatch, UnauthorizedError
+from application.auth.common.errors import (
+    EmailCodeMismatchError,
+    InvalidDocumentError,
+    UnauthorizedError,
+    UserNotFoundError,
+)
 from application.common.errors.base import AppError
 from presentation.web_api.responses import ErrorData, ErrorResponse
 
@@ -18,13 +23,11 @@ logger = logging.getLogger(__name__)
 def setup_exception_handlers(app: FastAPI):
     app.add_exception_handler(AppError, error_handler(500))
     app.add_exception_handler(
-        EmailAlreadyRegistered, error_handler(status.HTTP_409_CONFLICT)
+        UserNotFoundError, error_handler(status.HTTP_404_NOT_FOUND)
     )
-    app.add_exception_handler(
-        UserNotFound, error_handler(status.HTTP_404_NOT_FOUND)
-    )
-    app.add_exception_handler(EmailCodeMismatch, error_handler(status.HTTP_401_UNAUTHORIZED))
+    app.add_exception_handler(EmailCodeMismatchError, error_handler(status.HTTP_401_UNAUTHORIZED))
     app.add_exception_handler(UnauthorizedError, error_handler(status.HTTP_401_UNAUTHORIZED))
+    app.add_exception_handler(InvalidDocumentError, error_handler(status.HTTP_400_BAD_REQUEST))
     app.add_exception_handler(Exception, unknown_exception_handler)
 
 

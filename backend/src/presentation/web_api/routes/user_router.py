@@ -10,7 +10,6 @@ from pydantic import EmailStr
 from application.common.idp import IdentityProvider
 from presentation.web_api.routes.schemas import MeResponse
 
-
 user_router = APIRouter(prefix="/user", tags=["user"], route_class=DishkaRoute)
 
 

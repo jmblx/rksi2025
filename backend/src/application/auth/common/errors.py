@@ -4,14 +4,7 @@ from application.common.errors.base import ApplicationError
 
 
 @dataclass(eq=False)
-class EmailAlreadyRegistered(ApplicationError):
-    @property
-    def title(self) -> str:
-        return "Email Already Registered"
-
-
-@dataclass(eq=False)
-class UserNotFound(ApplicationError):
+class UserNotFoundError(ApplicationError):
     by: str
 
     @property
@@ -27,7 +20,14 @@ class UnauthorizedError(ApplicationError):
 
 
 @dataclass(eq=False)
-class EmailCodeMismatch(ApplicationError):
+class EmailCodeMismatchError(ApplicationError):
     @property
     def title(self) -> str:
         return "invalid email code"
+
+
+@dataclass(eq=False)
+class InvalidDocumentError(ApplicationError):
+    @property
+    def title(self) -> str:
+        return "invalid document error"

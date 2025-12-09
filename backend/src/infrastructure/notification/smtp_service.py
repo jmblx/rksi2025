@@ -1,5 +1,6 @@
-from email.message import EmailMessage
 import smtplib
+from email.message import EmailMessage
+
 from core.config import SmtpConfig
 
 

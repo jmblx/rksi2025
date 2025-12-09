@@ -1,7 +1,6 @@
 import hashlib
 import secrets
 import threading
-from datetime import datetime, UTC
 from typing import cast
 
 from redis.asyncio import Redis

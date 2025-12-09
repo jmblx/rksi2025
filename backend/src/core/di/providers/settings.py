@@ -8,7 +8,8 @@ from core.config import (
     GlobalConfig,
     GunicornConfig,
     RedisConfig,
-    config_loader, SmtpConfig,
+    SmtpConfig,
+    config_loader,
 )
 
 LoggingConfig = NewType("LoggingConfig", dict)
