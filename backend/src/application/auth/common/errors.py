@@ -20,14 +20,14 @@ class UserNotFound(ApplicationError):
 
 
 @dataclass(eq=False)
-class CredMismatch(ApplicationError):
-    @property
-    def title(self) -> str:
-        return "Credentials Mismatch"
-
-
-@dataclass(eq=False)
 class UnauthorizedError(ApplicationError):
     @property
     def title(self) -> str:
         return "Unauthorized"
+
+
+@dataclass(eq=False)
+class EmailCodeMismatch(ApplicationError):
+    @property
+    def title(self) -> str:
+        return "invalid email code"

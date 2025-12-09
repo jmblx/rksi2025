@@ -6,11 +6,10 @@ from typing import cast
 
 from redis.asyncio import Redis
 
-from application.auth.common.errors import UserNotFound, CredMismatch
 from application.common.interfaces.uow import Uow
 from infrastructure.db.gateways.session_gateway import SessionGateway
 from infrastructure.db.gateways.user_gateway import UserGateway
-from infrastructure.db.models import UserSession, User
+from infrastructure.db.models import User
 from infrastructure.email_notification import EmailCodeService
 from presentation.web_api.routes.schemas import LoginRequest
 

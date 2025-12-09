@@ -14,6 +14,7 @@ from infrastructure.log.main import configure_logging
 from presentation.web_api.exceptions import setup_exception_handlers
 from presentation.web_api.middlwares import setup_middlewares
 from presentation.web_api.routes.auth_router import auth_router
+from presentation.web_api.routes.document_router import document_router
 from presentation.web_api.routes.user_router import user_router
 
 
@@ -34,6 +35,7 @@ def create_app() -> FastAPI:
     )
     setup_exception_handlers(app)
     app.include_router(auth_router)
+    app.include_router(document_router)
     app.include_router(user_router)
     setup_middlewares(app)
     return app
