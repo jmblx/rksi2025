@@ -1,3 +1,7 @@
+Deploy status:
+
+[![Deploy](https://github.com/jmblx/rksi2025/actions/workflows/deploy.yml/badge.svg)](https://github.com/jmblx/rksi2025/actions/workflows/deploy.yml)
+
 # Кейс "Лучшее мобильное приложение" Международный онлайн Хакатон IT-Tech 2025
 
 ---
