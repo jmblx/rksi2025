@@ -13,3 +13,4 @@ class Document(Base):
     created_at : Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, default=datetime.datetime.now)
     expiration_date: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False)
     hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    token: Mapped[str] = mapped_column(String(64), nullable=True)

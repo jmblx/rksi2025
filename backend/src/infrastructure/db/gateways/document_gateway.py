@@ -77,3 +77,9 @@ class DocumentGateway:
             }
             for row in rows
         ]
+
+    async def get_by_token(self, token: str):
+        result = await self.session.execute(
+            select(Document).where(Document.token == token)
+        )
+        return result.scalar()

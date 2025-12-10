@@ -28,15 +28,15 @@ async def upload_document(
 
 
 @document_router.get(
-    "/check/{base64_doc_data}",
+    "/check/{doc_search_data}",
     response_model=CheckDocumentResponse,
     responses={404: {"description": "Document not found or invalid"}}
 )
 async def check_document(
-    base64_doc_data: str,
+    doc_search_data: str,
     handler: FromDishka[CheckDocumentHandler],
 ) -> CheckDocumentResponse:
-    return await handler.handle(base64_doc_data)
+    return await handler.handle(doc_search_data)
 
 
 @document_router.get(

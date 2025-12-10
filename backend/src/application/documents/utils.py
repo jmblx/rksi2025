@@ -1,4 +1,6 @@
 import datetime
+import secrets
+import string
 from io import BytesIO
 
 from barcode import Code128
@@ -39,14 +41,15 @@ def generate_barcode(data) -> bytes:
     buf = BytesIO()
 
     barcode.write(buf, options={
+        "module_width": 0.2,
         "module_height": 25.0,
-        "module_width": 0.4,
-        "quiet_zone": 6.5,
-        "font_size": 12,
-        "text_distance": 1.0,
-        "background": "white",
-        "foreground": "black",
-        "write_text": True,
+        "quiet_zone": 2.0,
+        "write_text": False
     })
 
     return buf.getvalue()
+
+
+def generate_short_token(length: int = 8) -> str:
+    alphabet = string.ascii_letters + string.digits  # base62
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
