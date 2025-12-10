@@ -17,3 +17,9 @@ password = "postgres"
 [redis]
 host = "localhost"
 port = 6379
+
+[smtp]
+smtp_password = "aaaa bbbb cccc dddd"
+smtp_user = "rksi@hack.ru"
+smtp_host = "smtp.gmail.com"
+smtp_port = 465

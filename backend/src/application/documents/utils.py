@@ -1,6 +1,4 @@
-import base64
 import datetime
-import json
 from io import BytesIO
 
 from barcode import Code128

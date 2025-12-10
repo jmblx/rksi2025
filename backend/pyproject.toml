@@ -16,6 +16,7 @@ dependencies = [
     "requests>=2.32.5",
     "qrcode[pil]>=8.2",
     "barcode>=1.0.4",
+    "setuptools>=75.9.1",
 ]
 
 [project.optional-dependencies]
